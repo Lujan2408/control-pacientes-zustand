@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form"
+import Error from "./Error"
 
 export default function PatientForm() {
   
@@ -34,7 +35,12 @@ export default function PatientForm() {
                         required: 'El Nombre del Paciente es Obligatorio'
                       })}
                   />
-                {errors.name?.message}
+
+                  {/* Renderizamos el componente y le pasamos errors como children para hacerlo reutilizable */}
+                  {errors.name && (
+                    <Error>{errors.name?.message?.toString()}</Error>
+                  )}
+
               </div>
 
 
