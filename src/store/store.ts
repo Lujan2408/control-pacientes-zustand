@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 import { create } from "zustand";
+import { devtools} from 'zustand/middleware'
 import { DraftPatient, Patient } from "../types";
 import {v4 as uuidv4} from 'uuid'
 
@@ -17,24 +18,26 @@ const createPatient = (patient : DraftPatient) : Patient => {
 }
 
 // Creación del store con "create"
-export const usePatientStore = create<PatientStore>((set) => ({
-  patients: [], // State
-  activeId: '',
-  addPatient: (data) => {
-    // Función para pasarle el paciente
-    const newPatient = createPatient(data);
-    set((state) => ({
-      patients: [...state.patients, newPatient],
-    }));
-  },
-  deletePatient: (id) => {
-    set((state) => ({
-      patients: state.patients.filter( patient => patient.id !== id)
-    }))
-  },
-  getPatientById: (id) => {
-    set(() => ({
-      activeId: id
-    }))
-  }
-}));
+export const usePatientStore = create<PatientStore>()(
+    devtools((set) => ({
+      patients: [], // State
+      activeId: '',
+      addPatient: (data) => {
+        // Función para pasarle el paciente
+        const newPatient = createPatient(data);
+        set((state) => ({
+          patients: [...state.patients, newPatient],
+        }));
+      },
+      deletePatient: (id) => {
+        set((state) => ({
+          patients: state.patients.filter( patient => patient.id !== id)
+        }))
+      },
+      getPatientById: (id) => {
+        set(() => ({
+          activeId: id
+        }))
+      }
+    })
+))
