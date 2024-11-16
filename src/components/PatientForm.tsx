@@ -5,8 +5,7 @@ import { usePatientStore } from "../store/store";
 
 export default function PatientForm() {
   
-  // Conectamos la función y el state del store
-  const addPatient = usePatientStore(state => state.addPatient) 
+  const { addPatient } = usePatientStore() 
 
   const {
     register,
