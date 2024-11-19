@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 import { create } from "zustand";
-import { devtools} from 'zustand/middleware'
+import { createJSONStorage, devtools, persist} from 'zustand/middleware'
 import { DraftPatient, Patient } from "../types";
 import {v4 as uuidv4} from 'uuid'
 
@@ -20,7 +20,8 @@ const createPatient = (patient : DraftPatient) : Patient => {
 
 // Creación del store con "create"
 export const usePatientStore = create<PatientStore>()(
-    devtools((set) => ({
+    devtools(
+    persist( (set) => ({
       patients: [], // State
       activeId: '',
       addPatient: (data) => {
@@ -47,5 +48,8 @@ export const usePatientStore = create<PatientStore>()(
           activeId: '' // Limpiamos el id activo y lo seteamos a vacío
         }))
       }
+    }), {
+      name: 'patient-store', // Nombre del storage
+      storage: createJSONStorage(() => localStorage)
     })
 ))
