@@ -2,19 +2,32 @@ import { useForm } from "react-hook-form";
 import Error from "./Error";
 import { DraftPatient } from "../types";
 import { usePatientStore } from "../store/store";
+import { useEffect } from "react";
 
 export default function PatientForm() {
   
-  const { addPatient } = usePatientStore() 
+  const { addPatient, activeId, patients } = usePatientStore() 
+
+  useEffect(() => {
+    if(activeId) {
+      const activePatient = patients.filter( patient => patient.id === activeId)[0]
+      setValue('name', activePatient.name)
+      setValue('caretaker', activePatient.caretaker)
+      setValue('email', activePatient.email)
+      setValue('date', activePatient.date)
+      setValue('symptoms', activePatient.symptoms)
+    }
+  }, [activeId, patients])
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors } /* Extraemos errors del formState con object destructuring */,
     reset
   } = useForm<DraftPatient>();
 
-  const patientMessage = (data: DraftPatient) => {
+  const registerPatient = (data: DraftPatient) => {
     addPatient(data)
 
     reset()
@@ -31,7 +44,7 @@ export default function PatientForm() {
 
       <form
         className="bg-white shadow-md rounded-lg py-10 px-5 mb-10"
-        onSubmit={handleSubmit(patientMessage)}
+        onSubmit={handleSubmit(registerPatient)}
       >
         <div className="mb-5">
           <label htmlFor="name" className="text-sm uppercase font-bold">
