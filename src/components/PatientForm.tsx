@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 export default function PatientForm() {
   
-  const { addPatient, activeId, patients } = usePatientStore() 
+  const { addPatient, activeId, patients, updatePatient } = usePatientStore() 
 
   useEffect(() => {
     if(activeId) {
@@ -17,18 +17,24 @@ export default function PatientForm() {
       setValue('date', activePatient.date)
       setValue('symptoms', activePatient.symptoms)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeId, patients])
 
   const {
     register,
     handleSubmit,
     setValue,
-    formState: { errors } /* Extraemos errors del formState con object destructuring */,
+    formState: { errors }, // Extraemos errors del formState con object destructuring
     reset
   } = useForm<DraftPatient>();
 
   const registerPatient = (data: DraftPatient) => {
-    addPatient(data)
+    // Identificamos si en activeId hay algo disparamos la acción 
+    if(activeId) {
+      updatePatient(data)
+    } else {
+      addPatient(data)
+    }
 
     reset()
   };

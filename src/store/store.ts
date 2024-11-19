@@ -11,6 +11,7 @@ type PatientStore = {
   addPatient: (data: DraftPatient) => void; // Toma data, que son los datos extraídos por el usuario del formulario
   deletePatient: (id : Patient['id']) => void  
   getPatientById: (id : Patient['id']) => void
+  updatePatient: (data: DraftPatient) => void 
 }
 
 const createPatient = (patient : DraftPatient) : Patient => {
@@ -37,6 +38,13 @@ export const usePatientStore = create<PatientStore>()(
       getPatientById: (id) => {
         set(() => ({
           activeId: id
+        }))
+      },
+      updatePatient: (data) => {
+        set((state) => ({
+          // Iteramos por cada paciente y actualizamos el que tenga el id igual al que le pasamos
+          patients: state.patients.map( patient => patient.id === state.activeId ? {id: state.activeId, ...data} : patient), 
+          activeId: '' // Limpiamos el id activo y lo seteamos a vacío
         }))
       }
     })
