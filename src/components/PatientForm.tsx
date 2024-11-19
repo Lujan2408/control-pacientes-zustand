@@ -33,9 +33,14 @@ export default function PatientForm() {
     // Identificamos si en activeId hay algo disparamos la acción 
     if(activeId) {
       updatePatient(data)
+      toast.success('Paciente Actualizado', {
+        autoClose: 2500,
+      })
     } else {
       addPatient(data)
-      toast.success('Paciente Registrado')
+      toast.success('Paciente Registrado', {
+        autoClose: 2500,
+      })
     }
 
     reset()
